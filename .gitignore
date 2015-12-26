@@ -1,3 +1,9 @@
+*.cmd
+.tmp_versions
+Module.symvers
+modules.order
+tcp_cdg.mod.c
+
 # Object files
 *.o
 *.ko
