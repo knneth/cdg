@@ -278,9 +278,6 @@ static void tcp_cdg_cong_avoid(struct sock *sk, u32 ack, u32 acked)
 	u32 prior_snd_cwnd;
 	u32 incr;
 
-	if (tp->snd_cwnd < tp->snd_ssthresh && hystart_detect)
-		tcp_cdg_hystart_update(sk);
-
 	if (after(ack, ca->rtt_seq) && ca->rtt.v64) {
 		s32 grad = 0;
 
@@ -295,6 +292,9 @@ static void tcp_cdg_cong_avoid(struct sock *sk, u32 ack, u32 acked)
 		if (grad > 0 && tcp_cdg_backoff(sk, grad))
 			return;
 	}
+
+	if (tp->snd_cwnd < tp->snd_ssthresh && hystart_detect)
+		tcp_cdg_hystart_update(sk);
 
 	if (!tcp_is_cwnd_limited(sk)) {
 		ca->shadow_wnd = min(ca->shadow_wnd, tp->snd_cwnd);
